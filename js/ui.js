@@ -1,12 +1,47 @@
 console.log("loaded");
 
 ;(function(global, $) {
+
+function ProblemBoard(){
+
+}
+
+ProblemBoard.prototype.create = function() {
+	this.item = $('<div class="problem"></div>');
+	return this;
+};
+
+function SolutionBoard(){
+
+}
+
+SolutionBoard.prototype.create = function() {
+	this.item = $('<div class="solution"></div>');;
+	return this;
+};
+
+BoardFactory = function(){
+		this.types = {};
+		this.create = function(type){
+			return new this.types[type]().create();
+		};
+
+		this.register = function(type, cls){
+			if(cls.prototype.create){
+					this.types[type] = cls;
+			}
+		}
+};
+
 var BoardGeneratorSingleton = (function(){
   var instance;
 
   function init(){
-    // var _aBoard = []
     var _stage = $('.main');
+    _bf = new BoardFactory();
+    _bf.register('problem', ProblemBoard);
+    _bf.register('solution', SolutionBoard);
+
 
     //prototype
     var allvals       = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -63,11 +98,10 @@ var BoardGeneratorSingleton = (function(){
 
     }
 
-    function create(label, left, top, width, height){
-      var board  = $('<div class='+label+'></div>');
-      // $("div[class="+label+"]").addClass(label);
-      _boardstyle(board, left, top, width, height)
-      return board
+    function create(type, left, top, width, height){
+      var board  = _bf.create(type).item;
+      _boardstyle(board, left, top, width, height);
+      return board;
     }
 
 
@@ -84,7 +118,7 @@ var BoardGeneratorSingleton = (function(){
         for (var j = 0; j < box[key].length; j++) {
           var square = $('<div class="square" id="s0" ></div>')
           $('.'+cls+' '+"div[id="+key+"]").append(square)
-          $('#s0').attr( "id", box[key][j]);
+          $('.'+cls+' '+'#s0').attr( "id", box[key][j]);
         }
       }
     }
@@ -122,7 +156,7 @@ var BoardGeneratorSingleton = (function(){
 
 		});
 
-    $('.main').mouseenter(function() {
+    $('.main').mouseleave(function() {
       var bg = BoardGeneratorSingleton.getInstance();
       var board = bg.create('solution','500px', '100px', '300px', '300px');
 
