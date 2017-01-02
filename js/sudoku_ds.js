@@ -190,7 +190,7 @@ var allvals       = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
         // board -> Board(object)
         // interp reset all squares to false value
-        var resetboard = function(bd) {
+         function resetboard (bd) {
           for (var i = 0; i < bd.length; i++) {
             bd[i] = false
           }
@@ -198,14 +198,14 @@ var allvals       = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
         //  Pos, Val -> Broad(object)
         //interp. update new Board.currentbd with val at given position
-        var fillsquare = function(pos, val) {
+         function fillsquare (pos, val) {
           currentbd.splice(pos, 1, val)
           return currentbd
         }
 
         //  Pos -> Broad(object)
         //interp. update new Board.currentbd with false at given position
-        var removesquare = function(pos) {
+         function removesquare (pos) {
           return fillsquare(pos, false);
         }
 
@@ -215,12 +215,12 @@ var allvals       = [1, 2, 3, 4, 5, 6, 7, 8, 9];
         //interp. Backtracking serch function
         //        produce a solution for board , or false if board is unsolvable
         // Assump. the board is valid
-        var solve = function() {
+         function solve() {
           var board = currentbd
           return solveBd(board)
         }
 
-        var solveBd = function(bd) {
+         function solveBd(bd) {
           // debugger;
           if (issolve(bd)) {
             return bd;
@@ -229,7 +229,7 @@ var allvals       = [1, 2, 3, 4, 5, 6, 7, 8, 9];
           }
         }
 
-        var solveArrbd = function(arrb) {
+         function solveArrbd(arrb) {
           // debugger
             if ((arrb.length === 0)||(arrb === false)) {
               return false;
@@ -246,7 +246,7 @@ var allvals       = [1, 2, 3, 4, 5, 6, 7, 8, 9];
         //board(array) -> boolean
         //interp. produce true if board is solve
         //Assum: board is valid , so it is solved if it is full
-        var issolve = function(bd) {
+         function issolve(bd) {
           // debugger
           for (var i = 0; i < bd.length; i++) {
             if (typeof bd[i] === 'boolean') {
@@ -258,7 +258,7 @@ var allvals       = [1, 2, 3, 4, 5, 6, 7, 8, 9];
         //board(array) -> Arrayofboard
         //interp.produce Array of valid next Board from given board
         //funds first empty square, fill it with Natural[0,9] , keep only valid board
-        var nextbd = function(bd) {
+         function nextbd(bd) {
           // debugger
           return keeponlyvalid(fillwithvals(bd, findblank(bd)))
         }
@@ -266,7 +266,7 @@ var allvals       = [1, 2, 3, 4, 5, 6, 7, 8, 9];
         //board(array) -> pos
         //interp.produce the position of the first blank square
         //Assum: the board has at least one blank square
-        var findblank = function(bd) {
+         function findblank(bd) {
           // debugger
           for (var i = 0; i < bd.length; i++) {
             if (bd[i] === false) {
@@ -277,10 +277,10 @@ var allvals       = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
         //board(array) pos -> Arrayofboard
         //interp.  interp. fill it with Natural[0,9]
-        var fillwithvals = function(bd, pos) {
+        function fillwithvals(bd, pos) {
           // debugger
           var arr = [];
-          for (var i = 0; i < this.allvals.length; i++) {
+          for (var i = 0; i < allvals.length; i++) {
             var store = bd.slice(0)
             store.splice(pos, 1 , allvals[i])
             arr.push(store);
@@ -290,7 +290,7 @@ var allvals       = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
         //Arrayofboard -> Arrayofboard
         //interp.produce Array containing only valid board
-        var keeponlyvalid = function(arrb) {
+        function keeponlyvalid(arrb) {
           // debugger
           var arr = [];
           for (var i = 0; i < arrb.length; i++) {
@@ -306,7 +306,7 @@ var allvals       = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
         //board -> boolean (helper)
         //interp.produce Array containing only valid board
-        var isvalid = function(bd) {
+        function isvalid (bd) {
           // debugger
           if (isrowvalid(bd) && iscolvalid(bd) && isboxvalid(bd)) {
             return true;
@@ -317,28 +317,28 @@ var allvals       = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
         //  (invoke)    -> boolean (helper)
         //interp. return true if there are no duplicate values in rows
-        var isrowvalid = function(bd) {
+        function isrowvalid (bd) {
           // debugger
           return eachvalid( bd, row)
         }
 
         //  (invoke)    -> boolean (helper)
         //interp. return true if there are no duplicate values in cols
-        var iscolvalid = function(bd) {
+        function iscolvalid (bd) {
           // debugger
           return eachvalid( bd, col)
         }
 
         //  (invoke)    -> boolean (helper)
         //interp. return true if there are no duplicate values in boxs
-        isboxvalid = function(bd) {
+        function isboxvalid (bd) {
           // debugger
           return eachvalid( bd, box)
         }
 
         //  board, rows||cols|| boxs    -> boolean (helper)
         //interp. return true if there is no duplicate values in  a horizontal , vertical, or diagonal
-        var eachvalid = function( bd, casevalid) {
+        function eachvalid ( bd, casevalid) {
           //  debugger;
             //creat array of number
             for (key in casevalid) {
@@ -358,16 +358,8 @@ var allvals       = [1, 2, 3, 4, 5, 6, 7, 8, 9];
             } return true;
           }
 
-}(window, jQuery));
-
-
-
 
 //Helpers for easily readable in console
-
-
-
-
 
 Array.prototype.chunk = function ( n ) {
 
@@ -412,7 +404,7 @@ var displaylist = function(arr) {
 
 // console.log("Test for Board.solve()"+'\n'+'___________');
 // console.log('__1__'+'\n'+BD1.chunk(9)+'\n'+solve().chunk(9)+'\n' +" should equal to "+'\n' +BS1.chunk(9)+'\n'+'__1__');
-//##########################################
+// ##########################################
 
 // console.log("Test for issolve(currentbd)"+'\n'+'___________');
 // console.log('1 '+currentbd.chunk(9)+'\n'+issolve(currentbd)+'\n' +" should equal to "+ '\n'+false+'\n'+'__1__');
@@ -470,3 +462,5 @@ var displaylist = function(arr) {
 // console.log("Test for eachvalid())"+'\n'+'___________');
 // console.log('1 '+BD1.chunk(9)+'\n'+eachvalid(BD1, row)+'\n' +" should equal to "+ '\n'+true);
 //##########################################
+
+}(window, jQuery));

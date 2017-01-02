@@ -5,7 +5,6 @@ body {
   display: block;
   background-size: 100% 100%;
   padding: 0px;
-  /*background-image: url("../img/civil-war.jpg");*/
   text-align: center;
   font-family: 'Open Sans' sans-serif;
 }
@@ -41,14 +40,42 @@ button {
   border-radius: 15px;
 }
 
-.container {
+.main {
+  display: block;
+  width: 900px;
+  height: 500px;
+  margin: 100px auto 100px auto;
+  text-align: center;
+  background: red;
+  border: 1px solid;
+}
+
+
+/*.container {
   display: block;
   position: absolute;
   top: 101px;
   left: 32%;
-  width: 525px;
-  height: 525px;
-  background-color: rgba(149,149,149,0.8);
-  border: 1px solid rgba(149,149,149,0.8);
-  border-radius: 15px;
+  width: 475px;
+  height: 475px;
+  background-color: green;
+}*/
+
+.box {
+  display: inline-block;
+  position: relative;
+  width: 32%;
+  height: 32%;
+  border: 1px solid black;
+  margin: 1px;
+}
+
+.square {
+  display: inline-block;
+  position: relative;
+	width: 28%;
+	height: 28%;
+	background:blue;
+  margin: 0.25px;
+  border: 0.5px solid white;
 }
