@@ -1,127 +1,173 @@
 console.log("loaded");
 
+
 ;(function(global, $) {
 
-function ProblemBoard(){
 
+// function clone(src,out){
+// 	debugger;
+// 	for(var attr in src.prototype){
+// 		out.prototype[attr] = src.prototype[attr];
+// 	}
+// }
+
+
+function Board(arr){
+	// debugger;
+	this.item  = $('<div class="board"></div>');
+	this.solver = new $B('test')//refer to algorithms
+	for (key in this.solver.box) {
+		var boxe    = $('<div class="box" id="'+key+'" ></div>')
+		for (var j = 0; j < this.solver.box[key].length; j++) {
+			var square = $('<div class="square" id="'+this.solver.box[key][j]+'" ></div>')
+			square.appendTo(boxe)
+		} boxe.appendTo(this.item)
+	}
+	this.fillproblem(arr);
 }
 
-ProblemBoard.prototype.create = function() {
-	this.item = $('<div class="problem"></div>');
-	return this;
+
+Board.prototype.fillproblem = function(arr) {
+	this.solver.fillallsquare(arr);
+	for (var i = 0; i < arr.length; i++) {
+		if (arr[i] !== false) {
+			this.item.find("div[id="+i+"]").text(arr[i])
+		} else {
+			this.item.find("div[id="+i+"]").text("")
+		}
+	}
 };
 
-function SolutionBoard(){
 
+Board.prototype.style = function(left, top, width, height){
+	// this.item.css('background', clr)
+	this.item.css('left',left);
+	this.item.css('top',top);
+	this.item.css('width',width);
+	this.item.css('height',height);
+
+	this.item.css({'display':'block', 'position':'absolute', 'background-color':'green'});
 }
 
-SolutionBoard.prototype.create = function() {
-	this.item = $('<div class="solution"></div>');;
-	return this;
+
+Board.prototype.get = function() {
+
+	return this.item;
 };
 
-BoardFactory = function(){
+
+function ProblemBoardBuilder(arr){
+	// debugger;
+  this.item = new Board(arr)
+	this.init();
+}
+
+
+ProblemBoardBuilder.prototype.init = function() {
+
+};
+
+
+ProblemBoardBuilder.prototype.get = function() {
+	// debugger;
+	return this.item;
+};
+
+// clone(Board, SolutionBoardBuilder);
+
+function SolutionBoardBuilder(arr){
+	// debugger
+	this.item = new Board(arr)
+	this.init();
+	this.fillsolve()
+}
+
+
+SolutionBoardBuilder.prototype.init = function() {
+
+};
+
+
+SolutionBoardBuilder.prototype.fillsolve = function(){
+	// debugger;
+	var boardnow = this.item.solver.solve()
+	this.item.solver.fillallsquare(boardnow)
+	for (var i = 0; i < boardnow.length; i++) {
+		if (boardnow !== false) {
+			this.item.item.find("div[id="+i+"]").text(boardnow[i]).css('color','white')
+		} else {
+			alert('no solution')
+		}
+	}
+}
+
+
+SolutionBoardBuilder.prototype.get = function() {
+	// debugger;
+	return this.item;
+};
+
+
+BoardFactory = function(arr){
+	// debugger
 		this.types = {};
 		this.create = function(type){
-			return new this.types[type]().create();
+			return new this.types[type](arr).get();
 		};
 
 		this.register = function(type, cls){
-			if(cls.prototype.create){
+			if(cls.prototype.init && cls.prototype.get){
 					this.types[type] = cls;
 			}
 		}
 };
 
+
 var BoardGeneratorSingleton = (function(){
   var instance;
 
+	var BD1 = [     2,     7,     4, false,     9,     1, false, false,     5,
+									1, false, false,     5, false, false, false,     9, false,
+									6, false, false, false, false,     3,     2,     8, false,
+							false, false,     1,     9, false, false, false, false,     8,
+							false, false,     5,     1, false, false,     6, false, false,
+									7, false, false, false,     8, false, false, false,     3,
+									4, false,     2, false, false, false, false, false,     9,
+							false, false, false, false, false, false, false,     7, false,
+									8, false, false,     3,     4,     9, false, false, false]
+
+	var BD2 = [     5, false, false, false, false,     4, false,     7, false,
+							false,     1, false, false,     5, false,     6, false, false,
+							false, false,     4,     9, false, false, false, false, false,
+							false,     9, false, false, false,     7,     5, false, false,
+									1,     8, false,     2, false, false, false, false, false,
+							false, false, false, false, false,     6, false, false, false,
+							false, false,     3, false, false, false, false, false,     8,
+							false,     6, false, false,     8, false, false, false,     9,
+							false, false,     8, false,     7, false, false,     3,     1]
+
   function init(){
+		// debugger;
     var _stage = $('.main');
-    _bf = new BoardFactory();
-    _bf.register('problem', ProblemBoard);
-    _bf.register('solution', SolutionBoard);
+    var _bf = new BoardFactory(BD2);
+		// var solver = new $B('test')//refer to algorithm
+    _bf.register('problem', ProblemBoardBuilder);
+    _bf.register('solution', SolutionBoardBuilder);
 
 
-    //prototype
-    var allvals       = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-    // //row is object of array
-    // //interp. positions of all the columns
-    // var row = {
-    //   R1 :  [ 0, 1, 2, 3, 4, 5, 6, 7, 8],
-    //   R2 :  [ 9,10,11,12,13,14,15,16,17],
-    //   R3 :  [18,19,20,21,22,23,24,25,26],
-    //   R4 :  [27,28,29,30,31,32,33,34,35],
-    //   R5 :  [36,37,38,39,40,41,42,43,44],
-    //   R6 :  [45,46,47,48,49,50,51,52,53],
-    //   R7 :  [54,55,56,57,58,59,60,61,62],
-    //   R8 :  [63,64,65,66,67,68,69,70,71],
-    //   R9 :  [72,73,74,75,76,77,78,79,80]
-    //   };
-    //
-    // //col is object of array
-    // //interp. positions of all the columns
-    // var col = {
-    //   C1 :  [ 0, 9,18,27,36,45,54,63,72],
-    //   C2 :  [ 1,10,19,28,37,46,55,64,73],
-    //   C3 :  [ 2,11,20,29,38,47,56,65,74],
-    //   C4 :  [ 3,12,21,30,39,48,57,66,75],
-    //   C5 :  [ 4,13,22,31,40,49,58,67,76],
-    //   C6 :  [ 5,14,23,32,41,50,59,68,77],
-    //   C7 :  [ 6,15,24,33,42,51,60,69,78],
-    //   C8 :  [ 7,16,25,34,43,52,61,70,79],
-    //   C9 :  [ 8,17,26,35,44,53,62,71,80]
-    //   };
-    //
-    //box is object of array
-    //interp. positions of all the box
-    var box = {
-      B1 :  [ 0, 1, 2, 9,10,11,18,19,20],
-      B2 :  [ 3, 4, 5,12,13,14,21,22,23],
-      B3 :  [ 6, 7, 8,15,16,17,24,25,26],
-      B4 :  [27,28,29,36,37,38,45,46,47],
-      B5 :  [30,31,32,39,40,41,48,49,50],
-      B6 :  [33,34,35,42,43,44,51,52,53],
-      B7 :  [54,55,56,63,64,65,72,73,74],
-      B8 :  [57,58,59,66,67,68,75,76,77],
-      B9 :  [60,61,62,69,70,71,78,79,80]
-      };
-
-    function _boardstyle(board, left, top, width, height){
-      board.css('left',left);
-      board.css('top',top);
-      board.css('width',width);
-      board.css('height',height);
-
-      board.css({'display':'block', 'position':'absolute', 'background-color':'green'});
-
-    }
-
-    function create(type, left, top, width, height){
-      var board  = _bf.create(type).item;
-      _boardstyle(board, left, top, width, height);
+    function create(type ,arr , left, top, width, height){
+			// debugger;
+      var board  = _bf.create(type);
+      board.style(left, top, width, height);
       return board;
     }
 
 
-
     function add(board){
-      // debugger
-      var cls = board.attr("class")
-      _stage.append(board);
+      _stage.append(board.get());
 
-      for (key in box) {
-        var boxe    = $('<div class="box" id="b0" ></div>')
-        board.append(boxe);
-        $('.'+cls+' '+'#b0').attr( "id", key );
-        for (var j = 0; j < box[key].length; j++) {
-          var square = $('<div class="square" id="s0" ></div>')
-          $('.'+cls+' '+"div[id="+key+"]").append(square)
-          $('.'+cls+' '+'#s0').attr( "id", box[key][j]);
-        }
-      }
     }
+
 
     return {
       create : create,
@@ -143,28 +189,29 @@ var BoardGeneratorSingleton = (function(){
 })();
 
 
-
-
-
 	$(document).ready(function() {
 
 		$('.main').click(function(mouseEvent) {
 			var bg = BoardGeneratorSingleton.getInstance();
-			var board = bg.create('problem',mouseEvent.pageX-25, mouseEvent.pageY-25, '300px', '300px');
+			var board = bg.create('problem', BD2, mouseEvent.pageX-25, mouseEvent.pageY-25, '300px', '300px');
 
 			bg.add(board);
 
 		});
 
-    $('.main').mouseleave(function() {
-      var bg = BoardGeneratorSingleton.getInstance();
-      var board = bg.create('solution','500px', '100px', '300px', '300px');
+    document.addEventListener("keydown", function(event) {
+			if (event.which == '32') {
+				var bg = BoardGeneratorSingleton.getInstance();
+				var board = bg.create('solution', BD2, '500px', '100px', '300px', '300px');
 
-      bg.add(board);
-
+				bg.add(board);
+			}
     });
 
-
 	});
+
+  $(document).ready(function() {
+    $(".main").draggable()
+  });
 
 }(window, jQuery));

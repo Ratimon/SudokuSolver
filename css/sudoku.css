@@ -7,6 +7,7 @@ body {
   padding: 0px;
   text-align: center;
   font-family: 'Open Sans' sans-serif;
+  color: yellow;
 }
 
 html {
@@ -62,19 +63,21 @@ button {
 }*/
 
 .box {
-  display: inline-block;
-  position: relative;
-  width: 32%;
+  /*display: inline-block;
+  position: relative;*/
+  float: left;
+  width: 25%;
   height: 32%;
   border: 1px solid black;
   margin: 1px;
 }
 
 .square {
-  display: inline-block;
-  position: relative;
-	width: 28%;
-	height: 28%;
+  /*display: inline-block;
+  position: relative;*/
+  float: left;
+	width: 30%;
+	height: 30%;
 	background:blue;
   margin: 0.25px;
   border: 0.5px solid white;
